@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.panel_name }}</title>
+</head>
+<body>
+    <h1>Welcome to {{ config.panel_name }} (v{{ config.version }})</h1>
+    <form id="start-service-form">
+        <label for="service-name">Service Name:</label>
+        <input type="text" id="service-name" name="service_name" required>
+        <button type="submit">Start Service</button>
+    </form>
+    <form id="stop-service-form">
+        <label for="service-name">Service Name:</label>
+        <input type="text" id="service-name" name="service_name" required>
+        <button type="submit">Stop Service</button>
+    </form>
+
+    <script>
+        document.getElementById('start-service-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            fetch('/start_service', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `service_name=${encodeURIComponent(document.getElementById('service-name').value)}`
+            }).then(response => response.json())
+              .then(data => alert(data.message));
+        });
+
+        document.getElementById('stop-service-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            fetch('/stop_service', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `service_name=${encodeURIComponent(document.getElementById('service-name').value)}`
+            }).then(response => response.json())
+              .then(data => alert(data.message));
+        });
+    </script>
+</body>
+</html>
